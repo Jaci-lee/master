@@ -14,4 +14,4 @@
    感应器、
    人体感应等
    
-   用户在机器人端定制开发APPk请参考此 demo 以及 [机器人开发文档](https://github.com/1327652937/master) 
+   用户在机器人端定制开发APP请参考此 demo 以及 [机器人开发文档](https://www.kancloud.cn/jessie_lee/doc1/705465) 
