@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TestU05SdkDemo</string>
+    <string name="face_fail">人脸识别失败 ,陌生人</string>
+    <string name="no_face">没有发现人脸</string>
+</resources>

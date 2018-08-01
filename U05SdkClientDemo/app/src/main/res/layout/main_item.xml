@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+     >
+
+
+
+        <TextView
+            android:id="@+id/text_main"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="#ffffff"
+            android:gravity="center"
+            android:textColor="#929292"
+            android:textSize="18dp" />
+
+</RelativeLayout>
