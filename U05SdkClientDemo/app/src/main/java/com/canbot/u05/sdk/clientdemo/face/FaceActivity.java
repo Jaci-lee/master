@@ -11,6 +11,7 @@ import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.canbot.u05.IMsgBind;
@@ -19,6 +20,8 @@ import com.canbot.u05.sdk.clientdemo.StringMsgBean;
 import com.canbot.u05.sdk.clientdemo.bean.PersonData;
 import com.canbot.u05.sdk.clientdemo.util.Logger;
 import com.uurobot.sdkclientdemo.R;
+
+import java.io.File;
 
 /**
  * 人脸注册 删除 （使用人脸相关时 必须初始化FaceDbUtils和RegisterClient，已经在MyApplication中初始化）
@@ -66,7 +69,12 @@ public class FaceActivity extends Activity {
      */
     public void register(View view){
         //先获取数据库最大identification,然后注册
-        String maxId = findMax();
+        File file = new File("/mnt/internal_sd/a.jpg");
+            if (!file.exists()){
+                    Toast.makeText(this, "图片不存在,请将要注册的图片命名为a.jpg并放入sdcard下", Toast.LENGTH_SHORT).show();
+                   return;
+            }
+            String maxId = findMax();
         if (TextUtils.isEmpty(maxId)){
             Log.e(TAG,"获取最大值为null");
             maxId = "0";

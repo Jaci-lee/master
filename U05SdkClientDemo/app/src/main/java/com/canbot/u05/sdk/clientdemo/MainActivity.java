@@ -22,6 +22,7 @@ import com.canbot.u05.IMsgBind;
 import com.canbot.u05.IMsgCallBack;
 import com.canbot.u05.sdk.clientdemo.bean.IndustryDatas;
 import com.canbot.u05.sdk.clientdemo.bean.WifiStatus;
+import com.canbot.u05.sdk.clientdemo.face.FaceActivity;
 import com.canbot.u05.sdk.clientdemo.util.Logger;
 import com.canbot.u05.sdk.clientdemo.util.WifiUtils;
 import com.uurobot.sdkclientdemo.R;
@@ -241,6 +242,12 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 startActivity(new Intent(MainActivity.this, UploadFileActivity.class));
                         }
                 });
+                IndustryDatas industryDatas26 = new IndustryDatas(j++, "人脸识别", new Runnable() {
+                        @Override
+                        public void run() {
+                                startActivity(new Intent(MainActivity.this, FaceActivity.class));
+                        }
+                });
 
                 mbrowList.add(industryDatas1);
                 mbrowList.add(industryDatas2);
@@ -267,6 +274,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 mbrowList.add(industryDatas23);
                 mbrowList.add(industryDatas24);
                 mbrowList.add(industryDatas25);
+                mbrowList.add(industryDatas26);
                 return mbrowList;
         }
 
@@ -404,7 +412,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
          * 打开人脸追踪
          * 注：打开人脸追踪之后，尽量不要调动作，因为会有冲突
          */
-        private void sendCloseFaceTrack() {
+        private void sendOpenFaceTrack() {
                 sendToRobot(MsgType.SEND_OPEN_GPU_FACE_TRACK, "打开人脸追踪");
         }
 
@@ -412,7 +420,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
          * 关闭人脸追踪
          *
          */
-        private void sendOpenFaceTrack() {
+        private void sendCloseFaceTrack() {
                 sendToRobot(MsgType.SEND_CLOSE_GPU_FACE_TRACK, "关闭人脸追踪");
         }
         /**
