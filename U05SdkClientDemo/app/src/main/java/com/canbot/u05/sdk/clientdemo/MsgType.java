@@ -228,7 +228,10 @@ public class MsgType {
          * 消息类型--向胸口发送具体的动作指令
          */
         public static final int SEND_CONCRETE_ACTION = 8442;
-
+        /**
+         * 消息类型--控制底盘旋转角度
+         */
+        public static final int ROTATE = 8444;
 
         /**
          * 通知头部下发当前 wifi 状态及对应的 ssid
