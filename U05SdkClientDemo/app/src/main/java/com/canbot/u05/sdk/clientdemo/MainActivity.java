@@ -439,7 +439,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
         /**
          * 发送具体动作指令
-         * 例如：后退|后走|向后      数字（1或一） 步    注：前进，后退数字的单位为厘米
+         * 例如：后退|后走|向后      数字（1或一） 步    注：一步为0.5米
          *       前进|前走|向前|走   数字（1或一） 步
          *       左转|左移|左走      数字（1或一） 度
          *       右转|右移|右走      数字（1或一） 度
