@@ -249,6 +249,36 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                         }
                 });
 
+                IndustryDatas industryDatas27 = new IndustryDatas(j++, "左转30", new Runnable() {
+                        @Override
+                        public void run() {
+
+                                sendROTATE("30");
+                        }
+                });
+
+                IndustryDatas industryDatas28 = new IndustryDatas(j++, "左转270", new Runnable() {
+                        @Override
+                        public void run() {
+                                sendROTATE("270");
+                        }
+                });
+
+                IndustryDatas industryDatas29 = new IndustryDatas(j++, "右转30", new Runnable() {
+                        @Override
+                        public void run() {
+
+                                sendROTATE("-30");
+                        }
+                });
+
+                IndustryDatas industryDatas30 = new IndustryDatas(j++, "右转270", new Runnable() {
+                        @Override
+                        public void run() {
+                                sendROTATE("-270");
+                        }
+                });
+
                 mbrowList.add(industryDatas1);
                 mbrowList.add(industryDatas2);
                 mbrowList.add(industryDatas3);
@@ -275,6 +305,10 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 mbrowList.add(industryDatas24);
                 mbrowList.add(industryDatas25);
                 mbrowList.add(industryDatas26);
+                mbrowList.add(industryDatas27);
+                mbrowList.add(industryDatas28);
+                mbrowList.add(industryDatas29);
+                mbrowList.add(industryDatas30);
                 return mbrowList;
         }
 
@@ -446,6 +480,10 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
          */
         public void sendValueMotion() {
                 sendToRobot(MsgType.SEND_CONCRETE_ACTION, "50");
+        }
+
+        public void sendROTATE(String str) {
+                sendToRobot(MsgType.ROTATE, str);
         }
 
         /**
