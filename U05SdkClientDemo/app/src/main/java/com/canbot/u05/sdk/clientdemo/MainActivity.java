@@ -438,14 +438,14 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         }
 
         /**
-         * 发送具体动作指令
-         * 例如： 后退|后走|向后      + 100"    距离单位：厘米，数值必须为阿拉伯数字
-         *        前进|前走|向前|走   +100"
-         *        左转|左移|左走      +  90度"
-         *        右转|右移|右走      +  90度"
+         * 发送具体数值动作指令
+         * 例如： 100     表示前进100厘米
+         *        -100    表示后退100厘米
+         *
+         *        距离单位：厘米，数值必须为阿拉伯数字，正数表示前进，负数表示后退
          */
         public void sendValueMotion() {
-                sendToRobot(MsgType.SEND_CONCRETE_ACTION, "前进50");
+                sendToRobot(MsgType.SEND_CONCRETE_ACTION, "50");
         }
 
         /**
