@@ -234,6 +234,11 @@ public class MsgType {
         public static final int ROTATE = 8444;
 
         /**
+         * 消息类型--关机
+         */
+        public static final int SHUTDOWN = 8445;
+
+        /**
          * 通知头部下发当前 wifi 状态及对应的 ssid
          */
         public static final int SEND_MSG_WIFI_STATUS_SSID = 8881;
