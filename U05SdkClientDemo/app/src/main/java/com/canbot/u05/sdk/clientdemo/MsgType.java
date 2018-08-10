@@ -238,6 +238,32 @@ public class MsgType {
          */
         public static final int SHUTDOWN = 8445;
 
+
+        /**
+         * 停止地图任务播放
+         */
+        public static final int STOP_MAP_SOUND = 8624;
+
+        /**
+         * 地图播放TTS---用于支持导览任务TTS暂停继续
+         */
+        public static final int SEND_PLAY_MAP_TTS = 8625;
+
+        /**
+         * 地图播放音频---用于支持导览任务音频暂停继续
+         */
+        public static final int SEND_PLAY_MAP_VOICE = 8626;
+
+        /**
+         * 接受导览任务  暂停指令
+         */
+        public static final int SEND_PAD_MAP_SOUND_PAUSE = 8635;
+
+        /**
+         * 接受导览任务  继续指令
+         */
+        public static final int SEND_PAD_MAP_SOUND_CONTINUE = 8636;
+
         /**
          * 通知头部下发当前 wifi 状态及对应的 ssid
          */
