@@ -73,10 +73,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_main);
 
-                IntentFilter wifiIntentFilter = new IntentFilter();
-                wifiIntentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-                wifiIntentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
-
+                
                 GridView gridView = (GridView) findViewById(R.id.grid_view);
                 mbrowList = getDate();
                 MainAdapter mainAdapter = new MainAdapter(MainActivity.this,mbrowList);
