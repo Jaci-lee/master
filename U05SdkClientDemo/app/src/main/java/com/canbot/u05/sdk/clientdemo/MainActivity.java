@@ -701,7 +701,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 return true;
 
                         case MsgType.RECEIVER_MSG_WIFI_STATUS_SSID:
-                                Log.e(TAG, "收到机器人头部WIFI状态信息: " + msgData); //收到机器人头部WIFI状态信息（需要先发送查询wifi    SEND_MSG_WIFI_STATUS_SSID 指令）
+                                Log.e(TAG, "收到机器人头部WIFI状态信息: " + msgData); //1.若头部网路状态改变（如网络断开），则会主动发送消息指令;2.客户端可主动发送发送查询wifi状态 指令“SEND_MSG_WIFI_STATUS_SSID”。
                                 String[] strings = msgData.split(",");
                                 WifiStatus wifiStatus = new WifiStatus(strings[0], strings[1]);
                                 Log.e(TAG, "收到机器人头部WIFI状态信息: " + wifiStatus.toString());
