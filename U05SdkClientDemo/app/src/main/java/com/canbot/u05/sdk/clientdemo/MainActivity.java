@@ -128,7 +128,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 wifiIntentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
                 registerReceiver(wifiReceiver, wifiIntentFilter);
 
-                WifiReceiver.addOnWifiConnectStateChangedListener(mWifiListener);
+
         }
 
         private List<IndustryDatas> getDate() {
@@ -380,7 +380,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         protected void onDestroy() {
                 super.onDestroy();
                 dismissDialog();
-                WifiReceiver.removeOnWifiConnectStateChangedListener(mWifiListener);
+
                 unregisterReceiver(wifiReceiver);
 
         }
@@ -643,6 +643,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         protected void onResume() {
                 super.onResume();
                 bindService();
+                WifiReceiver.addOnWifiConnectStateChangedListener(mWifiListener);
         }
 
 
@@ -654,6 +655,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 super.onPause();
                 unRegisterAIDL();
                 unBindMsgService();
+                WifiReceiver.removeOnWifiConnectStateChangedListener(mWifiListener);
         }
 
 
