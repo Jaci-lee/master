@@ -1,6 +1,7 @@
 package com.canbot.u05.sdk.clientdemo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import com.canbot.u05.sdk.clientdemo.bean.IndustryDatas;
 import com.canbot.u05.sdk.clientdemo.bean.WifiStatus;
 import com.canbot.u05.sdk.clientdemo.face.FaceActivity;
 import com.canbot.u05.sdk.clientdemo.util.Logger;
+import com.canbot.u05.sdk.clientdemo.util.WifiReceiver;
 import com.canbot.u05.sdk.clientdemo.util.WifiUtils;
 import com.uurobot.sdkclientdemo.R;
 
@@ -68,17 +70,65 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
         private List<IndustryDatas>  mbrowList;
 
+        private WifiReceiver wifiReceiver;
+
+        private IntentFilter wifiIntentFilter;
+
+        private ProgressDialog mProgressDialog;
+
+
+        /**
+         * Wifi 连接状态改变广播
+         */
+        private WifiReceiver.OnWifiConnectStateChangedListener mWifiListener = new WifiReceiver.OnWifiConnectStateChangedListener() {
+
+                @Override
+                public void connectedNotU05(String ssid) {
+                        super.connectedNotU05(ssid);
+                        Log.e("WifiReceiver","connectedNotU05"+ssid);
+                        dismissDialog();
+                        WifiReceiver.removeOnWifiConnectStateChangedListener(mWifiListener);
+                        startActivity(new Intent(MainActivity.this,WebActivity.class));
+                }
+
+                @Override
+                public void connecting(String ssid) {
+                        super.connecting(ssid);
+                        Log.e("WifiReceiver","connecting"+ssid);
+                }
+
+                @Override
+                public void connected(String ssid) {
+                        super.connected(ssid);
+                        Log.e("WifiReceiver","connected"+ssid);
+                }
+
+                @Override
+                public void connectedFailed() {
+                        super.connectedFailed();
+                        Log.e("WifiReceiver","connectedFailed");
+                }
+        };
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_main);
 
-                
+
                 GridView gridView = (GridView) findViewById(R.id.grid_view);
                 mbrowList = getDate();
                 MainAdapter mainAdapter = new MainAdapter(MainActivity.this,mbrowList);
                 gridView.setAdapter(mainAdapter);
                 gridView.setOnItemClickListener(this);
+
+                wifiReceiver = new WifiReceiver();
+                wifiIntentFilter = new IntentFilter();
+                wifiIntentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+                wifiIntentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+                registerReceiver(wifiReceiver, wifiIntentFilter);
+
+                WifiReceiver.addOnWifiConnectStateChangedListener(mWifiListener);
         }
 
         private List<IndustryDatas> getDate() {
@@ -323,11 +373,16 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
          */
         public void sendPadConnetHeadWifi() {
                 sendToRobot(MsgType.REQUEST_HEAD_WIFI_INFO, "geWifiInfo");
+                showLoadingDialog(getString(R.string.wifi_hint));
         }
 
         @Override
         protected void onDestroy() {
                 super.onDestroy();
+                dismissDialog();
+                WifiReceiver.removeOnWifiConnectStateChangedListener(mWifiListener);
+                unregisterReceiver(wifiReceiver);
+
         }
 
         /**
@@ -733,13 +788,9 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                                                 Toast.makeText(MainActivity.this, "头部WIFI,ssid是:"+ssid+"pwd是:"+pwd, Toast.LENGTH_SHORT).show();
                                                         }
                                                 });
-                                                boolean b = WifiUtils.getInstance().connect(ssid, pwd);
-                                                if (b) {
-                                                        Logger.e(TAG, "网络连接成功");
-                                                }
-                                                else {
-                                                        Logger.e(TAG, "网络连接失败");
-                                                }
+                                                //胸口连接网络
+                                                WifiUtils.getInstance().connect(ssid, pwd);
+
                                         }
                                         else {
                                                 Logger.e(TAG, "头部发送的 wifi 不正确");
@@ -750,7 +801,30 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 return false;
         }
 
+        /**
+         * 显示加载对话框
+         *
+         * @param content 显示内容
+         */
+        public void showLoadingDialog(String content) {
+                if (mProgressDialog == null) {
+                        mProgressDialog = ProgressDialog.show(this, "", content);
+                }
+                else {
+                        mProgressDialog.setMessage(content);
+                        mProgressDialog.show();
+                }
+        }
 
+
+        /**
+         * 关闭正在显示的加载对话框
+         */
+        public void dismissDialog() {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                }
+        }
 
         /*-----------------------         请客户不要随意修改以下代码内容              ---------------------/
 

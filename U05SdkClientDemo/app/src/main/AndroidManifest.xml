@@ -46,6 +46,8 @@
 
         <activity android:name="com.canbot.u05.sdk.clientdemo.UploadFileActivity"
             android:screenOrientation="landscape"/>
+        <activity android:name="com.canbot.u05.sdk.clientdemo.WebActivity"
+            android:screenOrientation="landscape"/>
 
     </application>
 
