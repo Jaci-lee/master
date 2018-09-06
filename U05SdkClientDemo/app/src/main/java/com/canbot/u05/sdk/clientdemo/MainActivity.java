@@ -374,6 +374,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         public void sendPadConnetHeadWifi() {
                 sendToRobot(MsgType.REQUEST_HEAD_WIFI_INFO, "geWifiInfo");
                 showLoadingDialog(getString(R.string.wifi_hint));
+                WifiReceiver.addOnWifiConnectStateChangedListener(mWifiListener);
         }
 
         @Override
