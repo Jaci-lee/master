@@ -443,7 +443,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
         /**
          * 发送动作指令到机器人.
-		 * U05动作库（外发）.xlsx 里面有目前支持的动作ID列表.
+         * U05动作库（外发）.xlsx 里面有目前支持的动作ID列表.
          *
          * @param actionId 对应的动作Id
          */
@@ -453,7 +453,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
         /**
          * 发送表情指令到机器人.
-		 * U05眼睛库（确认版）.xlsx 列出了目前支持的眼睛表情ID.
+         * U05眼睛库（确认版）.xlsx 列出了目前支持的眼睛表情ID.
          *
          * @param emotionId 对应的表情Id
          */
@@ -644,7 +644,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         protected void onResume() {
                 super.onResume();
                 bindService();
-                WifiReceiver.addOnWifiConnectStateChangedListener(mWifiListener);
+
         }
 
 
