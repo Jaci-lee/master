@@ -12,6 +12,7 @@ import android.util.Log;
 import com.canbot.u05.sdk.clientdemo.face.FaceDbUtils;
 import com.canbot.u05.sdk.clientdemo.face.RegisterClient;
 import com.canbot.u05.sdk.clientdemo.face.SenseTimeEngine;
+import com.canbot.u05.sdk.clientdemo.socket.ServerManager;
 
 /**
  * Created by 110 on 2018/1/16.
@@ -48,6 +49,7 @@ public class MyApplication extends Application {
             }
         };
         mHandler.sendEmptyMessageDelayed(4, 1000);
+        ServerManager.getInstance().init(this);
     }
 
     SenseTimeEngine.OnSenseTimeInitListener onSenseTimeInitListener = new SenseTimeEngine.OnSenseTimeInitListener() {

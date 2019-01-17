@@ -73,6 +73,15 @@ public class MsgType {
          */
         public static final int HEAD_NO_WIFI_INFO = 47;
 
+        /**
+         * 消息类型--接受胸口充电状态信息指令(0:没有在充电 1:正在充电 2:正在自动回冲)
+         */
+        public static final int RECEIVER_CHARGE_STATUS = 53;
+
+        /**
+         * 消息类型--返回版本信息
+         */
+        public static final int SEND_CLIENT_VERSION = 54;
 
         /**
          * 消息类型---播放音频
@@ -233,6 +242,15 @@ public class MsgType {
          */
         public static final int ROTATE = 8444;
 
+        /**
+         * 消息类型--禁止或开启动作指令(0:禁止动作 1:开启动作)
+         */
+        public static final int SEND_DISABLE_ACTION = 8447;
+
+        /**
+         * 消息类型--接受客户端获取版本信息
+         */
+        public static final int CLIENT_QUERY_VERSION = 8449;
 
         /**
          * 通知头部下发当前 wifi 状态及对应的 ssid
@@ -243,5 +261,33 @@ public class MsgType {
          * 消息类型--接受胸口声源定位
          */
         public static final int RECEIVER_WAKEUP_SOURCE_ROTATE = 9301;
+
+        /**
+         * 消息类型--设置音量
+         */
+        public static final int VOLUME = 8407;
+
+        /**
+         * 消息类型--获取胸口充电状态信息指令
+         */
+        public static final int SEND_CHARGE_STATUS = 8448;
+        /**
+         * 基类action
+         */
+        private static final String BASEACITION = "com.canbot.u05.";
+        /**
+         * 三方联网成功广播
+         */
+        public static final String ACTION_CONNECT_ROBOT_SUCCESSFULLY = BASEACITION + "action.connect_the_robot_successfully";
+
+        /**
+         * 断开三方联网广播
+         */
+        public static final String ACTION_DISCONNECT_ROBOT_SUCCESSFULLY = BASEACITION + "action.disconnect_the_robot_successfully";
+
+        /**
+         * 开始三方联网的广播
+         */
+        public static final String ACTION_START_CONNECT_ROBOT = BASEACITION + "action.start_connect_the_robot";
 
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.canbot.u05.sdk.clientdemo.bean.IndustryDatas;
@@ -52,7 +53,7 @@ public class MainAdapter extends BaseAdapter {
                 if (convertView == null) {
                         holder = new ViewHolder();
                         convertView = inflater.inflate(R.layout.main_item, viewGroup, false);
-                        holder.iconName = (TextView) convertView.findViewById(R.id.text_main);
+                        holder.iconName = (Button) convertView.findViewById(R.id.text_main);
                         convertView.setTag(holder);
                 }
                 else {
@@ -65,7 +66,7 @@ public class MainAdapter extends BaseAdapter {
 
         protected class ViewHolder {
 
-                public TextView iconName;
+                public Button iconName;
         }
 
 }
