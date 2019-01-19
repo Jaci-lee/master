@@ -43,7 +43,7 @@ public class MsgType {
         public static final int RECEIVE_MSG_CURRENT_TIME = 19;
 
         /**
-         * 返回电量查询结果给客户端（接收查询的指令为8435）
+         * 返回电量查询结果给客户端（查询的指令为8435）
          */
         public static final int RECEIVE_POWER_INFO = 37;
 
@@ -53,9 +53,10 @@ public class MsgType {
         public static final int ON_SYSTEM_BOOT = 39;
 
         /**
-         * 返回机器人自身热点SSID给客户端（接收查询的指令为8436）
+         * 机器人自身热点SSID（查询的指令为8436）
          */
         public static final int U05_ROBOT_WIFI_SSID = 40;
+        //【必须使用手持平板成功进行一次三方组网后，查询时才会返回有效值。】
 
         /**
          * 头部发送当前连接的 wifi 的 ssid 和 password 给胸口.（对应指令为8438）.
@@ -213,7 +214,7 @@ public class MsgType {
         public static final int SEND_QUERY_POWER_INFO = 8435;
 
         /**
-         * 接受demo客户端发送过来的指令-查询机器人自身热点SSID
+         *  查询机器人自身热点SSID（需进行一次三方联网才可获取正确值 ，否则空值 ）
          */
         public static final int QUERY_U05_ROBOT_WIFI_SSID = 8436;
 
