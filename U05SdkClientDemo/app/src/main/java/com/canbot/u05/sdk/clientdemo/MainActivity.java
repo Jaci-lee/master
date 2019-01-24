@@ -737,6 +737,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
          * @param msgData 消息内容
          * @return true 客户端需要处理,可以根据识别结果自定义处理(访问自己的语义服务器，或者本地处理).
          * false 客户端不处理,返回给机器人使用机器人默认的语义服务器.
+         * 注意：此方法运行在子线程
          */
         private boolean handleResult(int msgType, String msgData) {
                 switch (msgType) {
