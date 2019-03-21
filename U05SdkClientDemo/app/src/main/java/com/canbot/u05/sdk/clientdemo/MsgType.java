@@ -272,6 +272,13 @@ public class MsgType {
          * 消息类型--获取胸口充电状态信息指令
          */
         public static final int SEND_CHARGE_STATUS = 8448;
+
+        /**
+         * 向头部发送胸口的声控识别结果，使用机器人默认语义处理
+         */
+        public static final int SEND_RECOGNITION_RESULT = 9117;
+
+
         /**
          * 基类action
          */
