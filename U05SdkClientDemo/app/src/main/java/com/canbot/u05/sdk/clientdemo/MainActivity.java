@@ -872,7 +872,30 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                         }
                                 }
                                 return true;
-
+//                        case MsgType.VOLUME:
+//                                if (!TextUtils.isEmpty(msgData)) {
+//                                        String s[] = msgData.split("#");
+//                                        if (s != null && s.length == 2) {
+//                                                if (!TextUtils.isEmpty(s[0]) && !TextUtils.isEmpty(s[1])) {
+//                                                        if (s[1].equals("+")) {
+//                                                                msgData = s[0] + "#" + "声音已经调大了";
+//                                                        }
+//                                                        if (s[1].equals("-")) {
+//                                                                msgData = s[0] + "#" + "/ai/ai05res/a1/res/audio/dance/self_introduction_my.wav";
+//                                                        }
+//                                                        if (s[1].equals("max")) {
+//                                                                msgData = s[0] + "#" + "声音已经最大了";
+//                                                        }
+//                                                        if (s[1].equals("min")) {
+//                                                                msgData = s[0] + "#" + "声音已经最小了";
+//                                                        }
+//
+//                                                }
+//                                        }
+//                                }
+//                                Logger.e(TAG, msgData + "---------");
+//                                sendToRobot(MsgType.VOLUME, msgData);
+//                                return true;
                         case MsgType.RECEIVER_CHARGE_STATUS://接受充电状态
                                 switch (msgData) {
                                         case "0":
