@@ -4,10 +4,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.NetworkInfo;
+import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.text.TextUtils;
-
+import android.util.Log;
 
 
 import java.util.ArrayList;
@@ -120,13 +121,18 @@ public class WifiReceiver extends BroadcastReceiver {
         //记录正在连接的状态
         private static boolean isConnecting = false;
 
+        private int disConnetedCount = 0;
+
+        //记录正在连接的状态
+        private String lastDisSSID = "";
+
         @Override
         public void onReceive(Context context, Intent intent) {
                 WifiManager mWifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
-
+//                Logger.e(TAG, "wifiInfo--------" + wifiInfo);
                 sListenerIterator = mOnWifiConnectStateChangedListenerLists.iterator();
-
+                Logger.d(TAG, "getAction--------" + intent.getAction());
                 if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {// wifi连接上与否
                         NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                         Logger.d(TAG, "网络已经改变----------> " + info.getState());
@@ -137,7 +143,7 @@ public class WifiReceiver extends BroadcastReceiver {
                                                 sListenerIterator.next().connectedFailed();
                                         }
                                         isConnecting = false;
-                                        isTraversal = false;
+                                        return;
                                 }
 
                                 if (!isDisConnected) {
@@ -147,6 +153,7 @@ public class WifiReceiver extends BroadcastReceiver {
                                                 sListenerIterator.next().disconnected();
                                         }
                                         Logger.e(TAG, "wifi已经断开 " + wifiInfo.getSSID());
+                                        disConnetedCount = 0;
                                         String ssid = wifiInfo.getSSID();
                                         if (ssid.startsWith("U05-") || ssid.startsWith("\"U05-") || ssid.startsWith("0x") || ssid.startsWith("\"0x") || ssid.contains("unknown ssid")) {
 //                                                if (MyCameraService.getInstance() == null){
@@ -155,9 +162,14 @@ public class WifiReceiver extends BroadcastReceiver {
 //                                                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(ConstUtils.ACTION_START_MYCAMERASERVICE));
 //                                                }
                                         }
+
+
                                 }
+
                         }
                         else if (info.getState().equals(NetworkInfo.State.CONNECTING)) {
+                                isDisConnected = false;
+                                disConnetedCount = 0;
                                 if (!isConnecting) {
                                         isConnecting = true;
                                         while (sListenerIterator.hasNext()) {
@@ -191,6 +203,25 @@ public class WifiReceiver extends BroadcastReceiver {
                 }
                 else if (intent.getAction().equals(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION)) {
                         int error = intent.getIntExtra(WifiManager.EXTRA_SUPPLICANT_ERROR, 0);
+                        SupplicantState supplicantState = intent.getParcelableExtra(WifiManager.EXTRA_NEW_STATE);
+                        Logger.e(TAG, "-------supplicantState------------: "+ supplicantState);
+                        if (supplicantState.equals(SupplicantState.DISCONNECTED)){
+                                Logger.e(TAG, "wifiInfo--------" + wifiInfo);
+                                if (lastDisSSID.equals(wifiInfo.getSSID()) && wifiInfo.getRssi() < -100){ //同一SSID连续连接三次不成功，并且Rssi 小于-100 视为连接失败
+                                        disConnetedCount++;
+                                        if (disConnetedCount == 5){
+                                                Log.e(TAG,"supplicantState 网络连接失败");
+                                                while (sListenerIterator.hasNext()) {
+                                                        isTraversal = true;
+                                                        sListenerIterator.next().connectedFailed();
+                                                }
+                                                disConnetedCount = 0;
+                                        }
+                                }
+                                lastDisSSID = wifiInfo.getSSID();
+                        }
+
+
                         switch (error) {
                                 case WifiManager.ERROR_AUTHENTICATING:
                                         for (OnWifiConnectStateChangedListener wifiListener : mOnWifiConnectStateChangedListenerLists) {

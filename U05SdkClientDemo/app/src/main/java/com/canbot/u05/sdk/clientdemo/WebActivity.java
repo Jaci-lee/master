@@ -80,6 +80,7 @@ public class WebActivity extends Activity {
         protected void onPause() {
                 super.onPause();
                 WifiReceiver.removeOnWifiConnectStateChangedListener(mWifiListener);
+                unregisterReceiver(wifiReceiver);
         }
 
         /**
