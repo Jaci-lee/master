@@ -74,14 +74,10 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         private List<IndustryDatas> mbrowList;
 		
         private WifiReceiver wifiReceiver;
-		
-        private IntentFilter wifiIntentFilter;
-		
+
         private ProgressDialog mProgressDialog;
 		
         private GBReceiver mGbReceiver;
-		
-        private IntentFilter mGbFilter;
 		
         /**
          * Wifi 连接状态改变广播
@@ -129,15 +125,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 gridView.setAdapter(mainAdapter);
                 gridView.setOnItemClickListener(this);
                 wifiReceiver = new WifiReceiver();
-                wifiIntentFilter = new IntentFilter();
+                IntentFilter wifiIntentFilter = new IntentFilter();
                 wifiIntentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
                 wifiIntentFilter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
                 registerReceiver(wifiReceiver, wifiIntentFilter);
                 mGbReceiver = new GBReceiver();
-                mGbFilter = new IntentFilter();
-                mGbFilter.addAction(MsgType.ACTION_CONNECT_ROBOT_SUCCESSFULLY);
-                mGbFilter.addAction(MsgType.ACTION_DISCONNECT_ROBOT_SUCCESSFULLY);
-                mGbFilter.addAction(MsgType.ACTION_START_CONNECT_ROBOT);
         }
 
         private List<IndustryDatas> getDate() {
@@ -728,6 +720,10 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         protected void onResume() {
                 super.onResume();
                 bindService();
+                IntentFilter mGbFilter = new IntentFilter();
+                mGbFilter.addAction(MsgType.ACTION_CONNECT_ROBOT_SUCCESSFULLY);
+                mGbFilter.addAction(MsgType.ACTION_DISCONNECT_ROBOT_SUCCESSFULLY);
+                mGbFilter.addAction(MsgType.ACTION_START_CONNECT_ROBOT);
                 registerReceiver(mGbReceiver, mGbFilter);
         }
 
