@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSON;
 import com.canbot.u05.IMsgBind;
 import com.canbot.u05.IMsgCallBack;
 import com.canbot.u05.sdk.clientdemo.bean.ClientVersionInfo;
+import com.canbot.u05.sdk.clientdemo.bean.DirectionCtrBean;
 import com.canbot.u05.sdk.clientdemo.bean.IndustryDatas;
 import com.canbot.u05.sdk.clientdemo.bean.WifiStatus;
 import com.canbot.u05.sdk.clientdemo.face.FaceActivity;
@@ -67,31 +68,31 @@ import java.util.List;
  */
 
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
-
+	
         public static final String TAG = "MainActivity";
-
+		
         private List<IndustryDatas> mbrowList;
-
+		
         private WifiReceiver wifiReceiver;
-
+		
         private IntentFilter wifiIntentFilter;
-
+		
         private ProgressDialog mProgressDialog;
-
+		
         private GBReceiver mGbReceiver;
-
+		
         private IntentFilter mGbFilter;
-
+		
         /**
          * Wifi 连接状态改变广播
          */
         private WifiReceiver.OnWifiConnectStateChangedListener mWifiListener = new WifiReceiver.OnWifiConnectStateChangedListener() {
-
                 @Override
                 public void connectedNotU05(String ssid) {
                         super.connectedNotU05(ssid);
                         Log.e("WifiReceiver", "connectedNotU05" + ssid);
                         dismissDialog();
+                        Toast.makeText(MainActivity.this,"外网连接成功：" + ssid,Toast.LENGTH_SHORT).show();
                         WifiReceiver.removeOnWifiConnectStateChangedListener(mWifiListener);
                         startActivity(new Intent(MainActivity.this, WebActivity.class));
                 }
@@ -103,15 +104,17 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 }
 
                 @Override
-                public void connected(String ssid) {
-                        super.connected(ssid);
-                        Log.e("WifiReceiver", "connected" + ssid);
+                public void connectedU05(String ssid) {
+                        super.connectedU05(ssid);
+                        Toast.makeText(MainActivity.this,"U05内网连接成功：" + ssid,Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
                 public void connectedFailed() {
                         super.connectedFailed();
+                        dismissDialog();
                         Log.e("WifiReceiver", "connectedFailed");
+                        Toast.makeText(MainActivity.this,"网络连接失败",Toast.LENGTH_SHORT).show();
                 }
         };
 
@@ -120,14 +123,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
                 setContentView(R.layout.activity_main);
-
-
                 GridView gridView = (GridView) findViewById(R.id.grid_view);
                 mbrowList = getDate();
                 MainAdapter mainAdapter = new MainAdapter(MainActivity.this, mbrowList);
                 gridView.setAdapter(mainAdapter);
                 gridView.setOnItemClickListener(this);
-
                 wifiReceiver = new WifiReceiver();
                 wifiIntentFilter = new IntentFilter();
                 wifiIntentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -138,21 +138,17 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 mGbFilter.addAction(MsgType.ACTION_CONNECT_ROBOT_SUCCESSFULLY);
                 mGbFilter.addAction(MsgType.ACTION_DISCONNECT_ROBOT_SUCCESSFULLY);
                 mGbFilter.addAction(MsgType.ACTION_START_CONNECT_ROBOT);
-
         }
 
         private List<IndustryDatas> getDate() {
-
                 mbrowList = new ArrayList<>();
                 int j = 0;
-
                 IndustryDatas industryDatas1 = new IndustryDatas(j, "播放tts", new Runnable() {
                         @Override
                         public void run() {
                                 sendPlayTTS();
                         }
                 });
-
                 IndustryDatas industryDatas2 = new IndustryDatas(j++, "播放音频", new Runnable() {
                         @Override
                         public void run() {
@@ -285,14 +281,12 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 sendQueryU05RobotWifiSSID();
                         }
                 });
-
                 IndustryDatas industryDatas24 = new IndustryDatas(j++, "走2步", new Runnable() {
                         @Override
                         public void run() {
                                 sendValueMotion();
                         }
                 });
-
                 IndustryDatas industryDatas25 = new IndustryDatas(j++, "上传文件", new Runnable() {
                         @Override
                         public void run() {
@@ -305,7 +299,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 startActivity(new Intent(MainActivity.this, FaceActivity.class));
                         }
                 });
-
                 IndustryDatas industryDatas27 = new IndustryDatas(j++, "左转30", new Runnable() {
                         @Override
                         public void run() {
@@ -313,14 +306,12 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 sendROTATE("30");
                         }
                 });
-
                 IndustryDatas industryDatas28 = new IndustryDatas(j++, "左转270", new Runnable() {
                         @Override
                         public void run() {
                                 sendROTATE("270");
                         }
                 });
-
                 IndustryDatas industryDatas29 = new IndustryDatas(j++, "右转30", new Runnable() {
                         @Override
                         public void run() {
@@ -328,28 +319,24 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 sendROTATE("-30");
                         }
                 });
-
                 IndustryDatas industryDatas30 = new IndustryDatas(j++, "右转270", new Runnable() {
                         @Override
                         public void run() {
                                 sendROTATE("-270");
                         }
                 });
-
                 IndustryDatas industryDatas31 = new IndustryDatas(j++, "播放网络歌曲", new Runnable() {
                         @Override
                         public void run() {
                                 sendPlayUrlSound("http://120.76.133.10:8080/oneapp/nanshannan.mp3");
                         }
                 });
-
                 IndustryDatas industryDatas32 = new IndustryDatas(j++, "禁止动作", new Runnable() {
                         @Override
                         public void run() {
                                 sendForbidaction();
                         }
                 });
-
                 IndustryDatas industryDatas33 = new IndustryDatas(j++, "查询充电状态", new Runnable() {
                         @Override
                         public void run() {
@@ -362,18 +349,34 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 sendAction();
                         }
                 });
-
                 IndustryDatas industryDatas35 = new IndustryDatas(j++, "连接网络", new Runnable() {
                         @Override
                         public void run() {
                                 sendOpenWifi();
                         }
                 });
-
                 IndustryDatas industryDatas36 = new IndustryDatas(j++, "版本号查询", new Runnable() {
                         @Override
                         public void run() {
                                 sendQueryVersion();
+                        }
+                });
+                IndustryDatas industryDatas37 = new IndustryDatas(j++, "声音调大", new Runnable() {
+                        @Override
+                        public void run() {
+                                sendVoicemax();
+                        }
+                });
+                IndustryDatas industryDatas38 = new IndustryDatas(j++, "声音调小", new Runnable() {
+                        @Override
+                        public void run() {
+                                sendVoicemin();
+                        }
+                });
+                IndustryDatas industryDatas39 = new IndustryDatas(j++, "前进后退左右转", new Runnable() {
+                        @Override
+                        public void run() {
+                                sendDirection();
                         }
                 });
                 mbrowList.add(industryDatas1);
@@ -412,22 +415,46 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 mbrowList.add(industryDatas34);
                 mbrowList.add(industryDatas35);
                 mbrowList.add(industryDatas36);
+                mbrowList.add(industryDatas37);
+                mbrowList.add(industryDatas38);
+                mbrowList.add(industryDatas39);
                 return mbrowList;
+        }
+
+        /**
+         * 控制底盘前进，后退，左转，右转，
+         * 转速和距离，角度，都可以自定义，具体的设置
+         * 请参考DirectionCtrBean,
+         * 其中：运动时间 = data/speed (s)
+         */
+        private void sendDirection() {
+                DirectionCtrBean directionCtrBean = new DirectionCtrBean();
+                directionCtrBean.setDirection(DirectionCtrBean.Direction.ROTATE);
+                directionCtrBean.setSpeed(20);
+                directionCtrBean.setData(90);
+                sendData(new StringMsgBean(MsgType.DIRECTION_CTR, JSON.toJSONString(directionCtrBean)));
         }
 
         private void sendQueryVersion() {
                 sendToRobot(MsgType.CLIENT_QUERY_VERSION, "1");
         }
 
+        private void sendVoicemin() {
+                sendToRobot(MsgType.VOLUME, "30");
+        }
+
+        private void sendVoicemax() {
+                sendToRobot(MsgType.VOLUME, "50");
+        }
+
         private void sendOpenWifi() {
                 Intent intent = new Intent();
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.setClassName("com.canbot.u05", "com.canbot.u05.activity.WifiActivity");
                 startActivity(intent);
         }
 
-        private void sendAction() {
-
-                sendToRobot(MsgType.SEND_DISABLE_ACTION, "1");
+        private void sendAction() { sendToRobot(MsgType.SEND_DISABLE_ACTION, "1");
         }
 
         private void sendChargeStatus() {
@@ -461,9 +488,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         protected void onDestroy() {
                 super.onDestroy();
                 dismissDialog();
-
                 unregisterReceiver(wifiReceiver);
-
         }
 
         /**
@@ -485,9 +510,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         /**
          * 发送播放音频指令到机器人
          */
-        public void sendPlaySound() {
-                sendToRobot(MsgType.PLAY_SOUND, "/ai/ai05res/a1/res/audio/dance/self_introduction_my.wav&&recoder");
-        }
+        public void sendPlaySound() { sendToRobot(MsgType.PLAY_SOUND, "/ai/ai05res/a1/res/audio/dance/self_introduction_my.wav&&recoder"); }
 
         /**
          * 发送停止音频播放到机器人
@@ -571,24 +594,18 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
          *
          * @param
          */
-        public void sendConnetWifi(String ssid, String password) {
-                sendToRobot(MsgType.WIFI_PASSWORD, ssid + "&&" + password);
-        }
+        public void sendConnetWifi(String ssid, String password) { sendToRobot(MsgType.WIFI_PASSWORD, ssid + "&&" + password); }
 
         /**
          * 打开人脸追踪
          * 注：打开人脸追踪之后，尽量不要调动作，因为会有冲突
          */
-        private void sendOpenFaceTrack() {
-                sendToRobot(MsgType.SEND_OPEN_GPU_FACE_TRACK, "打开人脸追踪");
-        }
+        private void sendOpenFaceTrack() { sendToRobot(MsgType.SEND_OPEN_GPU_FACE_TRACK, "打开人脸追踪"); }
 
         /**
          * 关闭人脸追踪
          */
-        private void sendCloseFaceTrack() {
-                sendToRobot(MsgType.SEND_CLOSE_GPU_FACE_TRACK, "关闭人脸追踪");
-        }
+        private void sendCloseFaceTrack() { sendToRobot(MsgType.SEND_CLOSE_GPU_FACE_TRACK, "关闭人脸追踪"); }
 
         /**
          * 发送眼睛动画
@@ -703,7 +720,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 sendAction(ActionId.SHAKE_HAND);
         }
 
-
         /**
          * 注：必须在在onResume方法中绑定远程service，否则可能会出现远程服务无法绑定的情况
          * 在需要接受机器人端消息的界面绑定远程服务
@@ -713,9 +729,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 super.onResume();
                 bindService();
                 registerReceiver(mGbReceiver, mGbFilter);
-
         }
-
 
         /**
          * 注：必须在onPause方法中解绑远程服务回调接口，解绑远程服务，否则后续可能出现无法接收远程服务消息的情况
@@ -729,7 +743,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 WifiReceiver.removeOnWifiConnectStateChangedListener(mWifiListener);
         }
 
-
         /**
          * 处理收到的结果
          *
@@ -741,102 +754,68 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
          */
         private boolean handleResult(int msgType, String msgData) {
                 switch (msgType) {
+                        case MsgType.ACTION_EXE_FINISH:
+                                Log.e(TAG, "handleResult: action finish ,action id  = "+msgData );
+                                break;
                         case MsgType.RECEIVER_MSG_VOICE_RECOGNIZER_RESULT:
                                 if (msgData.equals("今天天气怎么样")) {     //本地处理
-
                                         Log.e(TAG, "收到识别结果，本地需要处理: " + msgData);
-
                                         sendToRobot(MsgType.PLAY_TTS, "今天天气不错" + "&&recoder");
-
                                         return true;
 
                                 }
                                 else {    //本地不处理
-
                                         Log.e(TAG, "收到识别结果,本地不处理: " + msgData);
                                         return false;
 
                                 }
-
                         case MsgType.RECEIVER_MSG_SENSOR:   //感应器信息
-
                                 int which = Integer.parseInt(msgData);
-
                                 if (which == Sensor.Belly) {
-
                                         Log.e(TAG, "肚子感应器被触摸: ");
-
                                 }
                                 else if (which == Sensor.Buns) {
-
                                         Log.e(TAG, "屁股感应器被触摸: ");
-
                                 }
                                 else if (which == Sensor.Right_ear) {
-
                                         Log.e(TAG, "右耳感应器被触摸: ");
-
                                 }
                                 else if (which == Sensor.Mouth) {
-
                                         Log.e(TAG, "下巴感应器被触摸: ");
-
                                 }
                                 else if (which == Sensor.Head_top) {
-
                                         Log.e(TAG, "头顶感应器被触摸: ");
-
                                 }
                                 else if (which == Sensor.Left_ear) {
-
                                         Log.e(TAG, "左耳感应器被触摸: ");
-
                                 }
                                 else if (which == Sensor.HUMAN_BODY_FRONT) {
-
                                         Log.e(TAG, "人体感应器(前面)被触发: ");
-
                                 }
                                 else if (which == Sensor.HUMAN_BODY_BACK) {
-
                                         Log.e(TAG, "人体感应器(后面)被触发: ");
-
                                 }
-
                                 return true;
-
                         case MsgType.RECEIVER_MSG_WAKE_UP:   //头部唤醒信息
-
                                 Log.e(TAG, "收到头部唤醒: " + msgData);
-
                                 sendToRobot(MsgType.PLAY_TTS, "我在呢" + "&&recoder");
                                 sendToRobot(MsgType.RECEIVER_WAKEUP_SOURCE_ROTATE, msgData);
-
                                 return true;
-
                         case MsgType.RECEIVER_MSG_PLAY_SOUND_END: //语音播放结束
-
                                 Log.e(TAG, "语音播放结束: " + msgData);
-
                                 return true;
-
                         case MsgType.RECEIVER_MSG_SUSPEND:  //机器人进入休眠（待唤醒）状态
-
                                 Log.e(TAG, "收到机器人进入休眠状态: " + msgData);
-
                                 return true;
-
                         case MsgType.RECEIVE_POWER_INFO:
                                 Log.e(TAG, "收到机器人电量信息: " + msgData); //收到电量信息（需要先发送查询电量指令）
                                 return true;
-
                         case MsgType.RECEIVER_MSG_WIFI_STATUS_SSID:
                                 Log.e(TAG, "收到机器人头部WIFI状态信息: " + msgData); //1.若头部网路状态改变（如网络断开），则会主动发送消息指令;2.客户端可主动发送发送查询wifi状态 指令“SEND_MSG_WIFI_STATUS_SSID”。
                                 String[] strings = msgData.split(",");
                                 WifiStatus wifiStatus = new WifiStatus(strings[0], strings[1]);
                                 Log.e(TAG, "收到机器人头部WIFI状态信息: " + wifiStatus.toString());
                                 return true;
-
                         case MsgType.U05_ROBOT_WIFI_SSID: //收到机器人自身热点SSID（需要先发送查询指令 QUERY_U05_ROBOT_WIFI_SSID , 机器人热点密码是1223334444）
                                 if (!TextUtils.isEmpty(msgData)) {
                                         Log.e(TAG, "收到机器人自身热点ssid: " + msgData);
@@ -934,8 +913,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                                         Toast.makeText(MainActivity.this, "查询超时", Toast.LENGTH_SHORT).show();
                                                 }
                                         });
-                                }
-                                else {
+                                } else {
                                         ClientVersionInfo versionInfo = JSON.parseObject(msgData, ClientVersionInfo.class);
                                         Log.d(TAG, "versionInfo:" + versionInfo);
                                 }
@@ -954,13 +932,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         public void showLoadingDialog(String content) {
                 if (mProgressDialog == null) {
                         mProgressDialog = ProgressDialog.show(this, "", content);
-                }
-                else {
+                } else {
                         mProgressDialog.setMessage(content);
                         mProgressDialog.show();
                 }
         }
-
 
         /**
          * 关闭正在显示的加载对话框
@@ -973,8 +949,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
         /*-----------------------         请客户不要随意修改以下代码内容              ---------------------/
 
-
-
         /**
          * 绑定远程服务
          * 请客户不要随意修改此处代码。
@@ -984,13 +958,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                         Intent intent = new Intent("com.canbot.u05.service.MsgService");
                         intent.setClassName("com.canbot.u05", "com.canbot.u05.service.MsgService");
                         bindService(intent, connection, Context.BIND_AUTO_CREATE);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                         Log.e(TAG, "bindService-----Exception--" + e.toString());
                         e.printStackTrace();
                 }
         }
-
 
         /**
          * 解绑远程服务
@@ -998,7 +970,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         protected void unBindMsgService() {
                 unbindService(connection);
         }
-
 
         /**
          * 绑定远程接口
@@ -1008,13 +979,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                         try {
                                 mService.registerCallBack(iMsgCallback);
                                 Log.e(TAG, "registerAIDL---------");
-                        }
-                        catch (RemoteException e) {
+                        } catch (RemoteException e) {
                                 Log.e(TAG, "RemoteException-------" + e.toString());
                         }
                 }
         }
-
 
         /**
          * 解绑远程接口
@@ -1025,13 +994,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 mService.unRegisterCallBack(iMsgCallback);
                                 mService = null;
                                 Log.e(TAG, "unRegisterAIDL---------");
-                        }
-                        catch (RemoteException e) {
+                        } catch (RemoteException e) {
                                 e.printStackTrace();
                         }
                 }
         }
-
 
         private IMsgBind mService;
 
@@ -1050,7 +1017,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 }
         };
 
-
         /**
          * 远程服务回调接口，用于接收远程服务发送的消息
          * 请客户不要随意修改此处代码
@@ -1062,11 +1028,9 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                         StringMsgBean stringMsgBean = JSON.parseObject(dataJson, StringMsgBean.class);
                         final int msgType = stringMsgBean.getMsgType();
                         final String msgData = stringMsgBean.getMsgData();
-
                         return handleResult(msgType, msgData);
                 }
         };
-
 
         /**
          * 通过aidl发送数据
@@ -1075,14 +1039,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
          */
         protected void sendData(StringMsgBean msgBean) {
                 if (mService != null) {
-
                         String jsonString = JSON.toJSONString(msgBean);
-
                         try {
                                 Log.e(TAG, "sendData=" + jsonString);
                                 mService.send(jsonString);
-                        }
-                        catch (RemoteException e) {
+                        } catch (RemoteException e) {
                                 e.printStackTrace();
                                 Log.e(TAG, "RemoteException=" + e.toString());
                         }
@@ -1090,11 +1051,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         }
 
         private class GBReceiver extends BroadcastReceiver {
-
                 @Override
                 public void onReceive(Context context, Intent intent) {
-
-
                         if (intent.getAction().equals(MsgType.ACTION_CONNECT_ROBOT_SUCCESSFULLY)) {
                                 runOnUiThread(new Runnable() {
                                         @Override
@@ -1102,27 +1060,21 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                                 Toast.makeText(getApplicationContext(), "三方联网成功", Toast.LENGTH_SHORT).show();
                                         }
                                 });
-
-                        }
-                        else if (intent.getAction().equals(MsgType.ACTION_DISCONNECT_ROBOT_SUCCESSFULLY)) {
+                        } else if (intent.getAction().equals(MsgType.ACTION_DISCONNECT_ROBOT_SUCCESSFULLY)) {
                                 runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                                 Toast.makeText(getApplicationContext(), "断开三方联网成功", Toast.LENGTH_SHORT).show();
                                         }
                                 });
-
-                        }
-                        else if (intent.getAction().equals(MsgType.ACTION_START_CONNECT_ROBOT)) {
+                        } else if (intent.getAction().equals(MsgType.ACTION_START_CONNECT_ROBOT)) {
                                 runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                                 Toast.makeText(getApplicationContext(), "开始三方联网", Toast.LENGTH_SHORT).show();
                                         }
                                 });
-
                         }
-
                 }
         }
 }

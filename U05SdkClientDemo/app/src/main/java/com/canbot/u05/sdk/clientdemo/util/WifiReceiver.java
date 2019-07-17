@@ -131,6 +131,15 @@ public class WifiReceiver extends BroadcastReceiver {
                         NetworkInfo info = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                         Logger.d(TAG, "网络已经改变----------> " + info.getState());
                         if (info.getState().equals(NetworkInfo.State.DISCONNECTED)) {
+                                if (isConnecting){
+                                        while (sListenerIterator.hasNext()) {
+                                                isTraversal = true;
+                                                sListenerIterator.next().connectedFailed();
+                                        }
+                                        isConnecting = false;
+                                        isTraversal = false;
+                                }
+
                                 if (!isDisConnected) {
                                         isDisConnected = true;
                                         while (sListenerIterator.hasNext()) {

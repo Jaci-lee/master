@@ -290,5 +290,13 @@ public class MsgType {
          * 开始三方联网的广播
          */
         public static final String ACTION_START_CONNECT_ROBOT = BASEACITION + "action.start_connect_the_robot";
+        /**
+         * 动作执行完毕的反馈,只在调用动作库里面的动作时才有这个反馈
+         */
+        public static final int ACTION_EXE_FINISH = 9315;
 
+        /**
+         * 底盘运动控制，前进后退，左转右转
+         */
+        public static final int DIRECTION_CTR = 9316;
 }
