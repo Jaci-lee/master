@@ -27,6 +27,7 @@ import com.canbot.u05.sdk.clientdemo.bean.DirectionCtrBean;
 import com.canbot.u05.sdk.clientdemo.bean.IndustryDatas;
 import com.canbot.u05.sdk.clientdemo.bean.WifiStatus;
 import com.canbot.u05.sdk.clientdemo.face.FaceActivity;
+import com.canbot.u05.sdk.clientdemo.map.MapActivity;
 import com.canbot.u05.sdk.clientdemo.util.Logger;
 import com.canbot.u05.sdk.clientdemo.util.WifiReceiver;
 import com.canbot.u05.sdk.clientdemo.util.WifiUtils;
@@ -371,6 +372,12 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 sendDirection();
                         }
                 });
+                IndustryDatas industryDatas40 = new IndustryDatas(j++, "地图", new Runnable() {
+                        @Override
+                        public void run() {
+                                startActivity(new Intent(MainActivity.this, MapActivity.class));
+                        }
+                });
                 mbrowList.add(industryDatas1);
                 mbrowList.add(industryDatas2);
                 mbrowList.add(industryDatas3);
@@ -410,6 +417,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 mbrowList.add(industryDatas37);
                 mbrowList.add(industryDatas38);
                 mbrowList.add(industryDatas39);
+                mbrowList.add(industryDatas40);
                 return mbrowList;
         }
 
@@ -456,6 +464,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         private void sendForbidaction() {
                 sendToRobot(MsgType.SEND_DISABLE_ACTION, "0");
         }
+
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

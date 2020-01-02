@@ -49,6 +49,8 @@
             android:screenOrientation="landscape"/>
         <activity android:name="com.canbot.u05.sdk.clientdemo.WebActivity"
             android:screenOrientation="landscape"/>
+        <activity android:name="com.canbot.u05.sdk.clientdemo.map.MapActivity"
+            android:screenOrientation="landscape"/>
 
     </application>
 
