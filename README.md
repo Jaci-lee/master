@@ -15,3 +15,6 @@
    人体感应等
    
    用户在机器人端定制开发APP请参考此 demo 以及 [机器人开发文档](https://www.kancloud.cn/jessie_lee/doc1/705465) 
+
+# QA-Import.xls
+此文件为自定义对话-批量定制模板文件
