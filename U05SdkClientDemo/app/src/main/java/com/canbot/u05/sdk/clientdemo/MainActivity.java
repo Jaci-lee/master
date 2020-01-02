@@ -372,7 +372,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                                 sendDirection();
                         }
                 });
-                IndustryDatas industryDatas40 = new IndustryDatas(j++, "地图", new Runnable() {
+                IndustryDatas industryDatas40 = new IndustryDatas(j++, "地图接口测试", new Runnable() {
                         @Override
                         public void run() {
                                 startActivity(new Intent(MainActivity.this, MapActivity.class));
